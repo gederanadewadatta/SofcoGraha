@@ -18,7 +18,7 @@ public class Barang {
         @JsonProperty("nomorRegister")
         private int nomorRegister;
         @JsonProperty("jumlahBarang")
-        private String jumlahBarang;
+        private int jumlahBarang;
     }
     @Data
     public static class Request{
@@ -27,7 +27,7 @@ public class Barang {
         @JsonProperty("keteranganPemesanan")
         private String keteranganPemesanan;
         @JsonProperty("jumlahBarang")
-        private String jumlahBarang;
+        private int jumlahBarang;
         @JsonProperty("namaPemesan")
         private String namaPemesan;
         @JsonProperty("alamatPemesan")
@@ -54,7 +54,7 @@ public class Barang {
         @Column(name = "keterangan_pemesanan")
         private String keteranganPemesanan;
         @Column(name = "jumlah_barang")
-        private String jumlahBarang;
+        private int jumlahBarang;
         @Column(name = "nama_pemesan")
         private String namaPemesan;
         @Column(name = "alamat_pemesan")
@@ -65,18 +65,20 @@ public class Barang {
 
     }
     @Data
-    public class DTO {
+    public static class DTO {
+        @JsonProperty("nomorRegistrasi")
+        private int nomorRegistrasi;
         @JsonProperty("namaBarang")
         private String namaBarang;
-        @JsonProperty("keteranganPemesanan")
-        private String keteranganPemesanan;
         @JsonProperty("jumlahBarang")
-        private String jumlahBarang;
+        private int jumlahBarang;
         @JsonProperty("namaPemesan")
         private String namaPemesan;
         @JsonProperty("alamatPemesan")
         private String alamatPemesan;
         @JsonProperty("tanggalPemesanan")
         private Date tanggalPemesanan;
+        @JsonProperty("keteranganPemesanan")
+        private String keteranganPemesanan;
     }
 }

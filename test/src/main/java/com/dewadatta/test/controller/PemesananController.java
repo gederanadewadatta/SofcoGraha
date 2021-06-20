@@ -17,14 +17,14 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/pemesanan")
+@RequestMapping("/api/pemesanan")
 public class PemesananController {
 
     @Value("${spring.application.name}")
     String applicationName;
 
     @Autowired
-    PemesananService pemesananService;
+    private PemesananService pemesananService;
 
     @Autowired
     RestApiUtil restApiUtil;
@@ -32,23 +32,26 @@ public class PemesananController {
     public Response<Object> createPemesananBarang(HttpServletRequest httpRequest, HttpServletResponse httpServletResponse) throws Exception {
         try {
             Barang.Request requestData = restApiUtil.requestToObject(httpRequest, Barang.Request.class);
-
-            Barang.Response  responseData = pemesananService.createPemesananBarang(requestData);
-            log.debug("Create Pemesanan Barang Response: "+responseData);
+            pemesananService.createPemesananBarang(requestData);
+            int latestNomorRegistrasi = pemesananService.getLatestIdSeq();
+            Barang.Response responseData = new Barang.Response();
+            responseData.setResponseMessage("Pesanan telah diterima dengan nomor register "+latestNomorRegistrasi);
+                    log.debug("Create Pemesanan Barang Response: "+responseData);
             return Response.status(httpServletResponse, HttpStatus.OK, responseData);
         }catch (Exception e){
             log.error("Error Process Create Pemesanan Barang : " + e, e);
             return GlobalExceptionHandler.ChekingExceptionGlobal(applicationName, httpServletResponse, e);
-
         }
     }
 
-    @PatchMapping("/patch")
+    @PatchMapping("/patch/")
     public Response<Object> patchPemesananBarang(HttpServletRequest httpRequest, HttpServletResponse httpServletResponse) throws Exception {
         try {
             Barang.RequestPatch requestData = restApiUtil.requestToObject(httpRequest, Barang.RequestPatch.class);
 
-            Barang.Response  responseData = pemesananService.patchPemesananBarang(requestData);
+             pemesananService.patchPemesananBarang(requestData);
+            Barang.Response  responseData = new Barang.Response();
+            responseData.setResponseMessage("Jumlah Barang dengan nomor registrasi "+ requestData.getNomorRegister()+" telah diubah");
             log.debug("Patch Pemesanan Barang Response: "+responseData);
             return Response.status(httpServletResponse, HttpStatus.OK, responseData);
         }catch (Exception e){
@@ -61,7 +64,6 @@ public class PemesananController {
     @GetMapping("/get/{name}")
     public Response<Object> getPemesananBarangByName(@PathVariable("name") String name, HttpServletResponse httpServletResponse) throws Exception {
         try {
-
             List<Barang.DTO> responseData = pemesananService.getPemesananBarangByName(name);
             log.debug("Get Pemesanan Barang Response: "+responseData);
             return Response.status(httpServletResponse, HttpStatus.OK, responseData);
